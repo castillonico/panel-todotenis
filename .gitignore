@@ -1,0 +1,6 @@
+legacy/
+test/
+*.log
+.env
+.DS_Store
+core/
