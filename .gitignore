@@ -1,7 +1,5 @@
-legacy/
-test/
 *.log
 .env
 .DS_Store
-core/
+core/db.php
 db.php
