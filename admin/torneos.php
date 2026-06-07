@@ -298,9 +298,30 @@ button{
 <div class="container">
 
 ```
-<h1>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+
+```
+<h1 style="margin:0;">
     Torneos
 </h1>
+
+<a
+    href="index.php"
+    class="link"
+    style="
+        background:#067ec9;
+        color:white;
+        padding:12px 18px;
+        border-radius:14px;
+        text-decoration:none;
+        font-weight:bold;
+    "
+>
+    ← Volver al panel
+</a>
+
+</div>
+
 
 <div class="card">
 
@@ -507,16 +528,56 @@ button{
 
                     <td>
 
-                        <a
-                            href="?toggle=<?= $torneo["id"] ?>"
-                            class="link"
-                        >
+                        <td>
 
-                            <?= $torneo["activo"]
-                                ? "Desactivar"
-                                : "Activar" ?>
+```
+<a
+    href="?toggle=<?= $torneo["id"] ?>"
+    class="link"
+>
 
-                        </a>
+    <?= $torneo["activo"]
+        ? "Desactivar"
+        : "Activar" ?>
+
+</a>
+```
+
+</td>
+
+<td>
+
+```
+<div style="display:flex;gap:12px;flex-wrap:wrap;">
+
+    <a
+        href="editar_torneo.php?id=<?= $torneo["id"] ?>"
+        class="link"
+    >
+        Editar
+    </a>
+
+    <a
+        href="#"
+        class="link"
+        style="opacity:.5;"
+    >
+        Partidos
+    </a>
+
+    <a
+        href="#"
+        class="link"
+        style="opacity:.5;"
+    >
+        Ranking
+    </a>
+
+</div>
+```
+
+</td>
+
 
                     </td>
 

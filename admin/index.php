@@ -295,8 +295,24 @@ h1{
             </div>
 
         </a>
+        <a
+href="torneos.php"
+class="card">
+
+    <div class="card-title">
+        Torneos
+    </div>
+
+    <div class="card-description">
+        Crear, administrar y organizar torneos
+    </div>
+
+
+</a>
+
 
     </div>
+
 
     <div class="status-box"></div>
     <div>
