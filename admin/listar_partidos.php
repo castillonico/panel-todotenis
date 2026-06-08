@@ -158,9 +158,7 @@ function obtenerJugadores($pdo, $partido_id, $equipo){
 <title>Partidos</title>
 
 <style>
-
-/* 🔒 TU CSS ORIGINAL INTÁCTO (NO MODIFICADO) */
-
+    
 body{
 
     background:#0f1223;
@@ -283,17 +281,30 @@ body{
 .status-borrador{
 
     background:#6c5ce7;
-
 }
+
 .topbar{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:14px;
-    margin-bottom:20px;
-
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:14px;
+margin-bottom:20px;
 }
+
+.title{
+font-size:28px;
+font-weight:bold;
+}
+
+.button{
+background:#067ec9;
+color:white;
+text-decoration:none;
+padding:12px 18px;
+border-radius:14px;
+font-weight:bold;
+}
+
 
 @media(max-width:768px){
 

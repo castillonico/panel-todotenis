@@ -120,14 +120,27 @@ body{
     color:#fff;
     font-family:Arial;
 }
+
 .topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:14px;
+margin-bottom:20px;
+}
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:14px;
-    margin-bottom:20px;
+.title{
+font-size:28px;
+font-weight:bold;
+}
 
+.button{
+background:#067ec9;
+color:white;
+text-decoration:none;
+padding:12px 18px;
+border-radius:14px;
+font-weight:bold;
 }
 .container{
     max-width:900px;
