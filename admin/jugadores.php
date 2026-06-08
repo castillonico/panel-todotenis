@@ -288,7 +288,13 @@ body{
 }
 
 .topbar{
-    margin-bottom:10px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    margin-bottom:20px;
+
 }
 
 .create-box{
@@ -419,8 +425,9 @@ body{
 <div class="container">
 
     <div class="topbar">
-        <a href="index.php" class="chip">← Panel</a>
-    </div>
+    <div class="title"> Jugadores </div>
+    <a href="index.php" class="button"> ← Panel </a>
+</div>
 
     <!-- CREAR -->
 

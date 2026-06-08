@@ -365,18 +365,8 @@ select{
 <div class="container">
 
 <div class="topbar">
-
-    <div class="title">
-        Torneos
-    </div>
-
-    <a
-        href="index.php"
-        class="button"
-    >
-        Panel
-    </a>
-
+    <div class="title">Torneos </div>
+    <a href="index.php" class="button"> ← Panel </a>
 </div>
 
 <div class="card">

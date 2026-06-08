@@ -120,7 +120,15 @@ body{
     color:#fff;
     font-family:Arial;
 }
+.topbar{
 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    margin-bottom:20px;
+
+}
 .container{
     max-width:900px;
     margin:auto;
@@ -218,6 +226,10 @@ button{
 
 <div class="container">
 
+<div class="topbar">
+    <div class="title"> Crear partido </div>
+    <a href="index.php" class="button"> ← Panel </a>
+</div>
 <form method="POST">
 
 <!-- CONTEXTO -->

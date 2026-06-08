@@ -285,6 +285,15 @@ body{
     background:#6c5ce7;
 
 }
+.topbar{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    margin-bottom:20px;
+
+}
 
 @media(max-width:768px){
 
@@ -348,13 +357,9 @@ $categoriasFiltro = $pdo->query("
 <div class="match-list">
 
 <!-- PANEL -->
-<div style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
-
-    <a href="index.php"
-       style="background:#067ec9;color:white;text-decoration:none;padding:12px 18px;border-radius:12px;font-weight:bold;">
-        ← Panel
-    </a>
-
+<div class="topbar">
+    <div class="title"> Lista de partidos </div>
+    <a href="index.php" class="button"> ← Panel </a>
 </div>
 
 <!-- FILTROS -->
