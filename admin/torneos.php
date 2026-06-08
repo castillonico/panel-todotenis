@@ -364,7 +364,6 @@ select{
 
 <div class="container">
 
-```
 <div class="topbar">
 
     <div class="title">
@@ -587,7 +586,7 @@ select{
     </div>
 
 <?php endforeach; ?>
-```
+
 
 </div>
 
