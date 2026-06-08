@@ -274,14 +274,6 @@ h1{
             </div>
         </a>
 
-        <a href="crear_partido.php" class="card">
-            <div>
-                <div class="card-icon">📅</div>
-                <div class="card-title">Crear partido</div>
-                <div class="card-text">Programación de partidos singles y dobles.</div>
-            </div>
-        </a>
-
         <a href="listar_partidos.php" class="card">
             <div>
                 <div class="card-icon">📋</div>

@@ -4,106 +4,212 @@ require_once __DIR__ . "/../core/auth.php";
 
 require_once __DIR__ . "/../core/db.php";
 
-$torneos = $pdo->query("SELECT id,nombre FROM torneos ORDER BY nombre")->fetchAll(PDO::FETCH_ASSOC);
-$categorias = $pdo->query("SELECT id,nombre FROM categorias ORDER BY nombre")->fetchAll(PDO::FETCH_ASSOC);
-$jugadores = $pdo->query("SELECT id,nombre FROM jugadores WHERE activo=1 ORDER BY nombre")->fetchAll(PDO::FETCH_ASSOC);
+$torneo_id = (int)($_GET["torneo_id"] ?? 0);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if(!$torneo_id){
 
-    $sets_json = json_encode([
-        [$_POST["set1_a"] ?? 0, $_POST["set1_b"] ?? 0],
-        [$_POST["set2_a"] ?? 0, $_POST["set2_b"] ?? 0],
-        [$_POST["set3_a"] ?? 0, $_POST["set3_b"] ?? 0]
-    ]);
+    die("Falta torneo_id");
 
-    // =========================
-    // INSERT PARTIDO
-    // =========================
+}
+
+/*
+|--------------------------------------------------------------------------
+| TORNEO
+|--------------------------------------------------------------------------
+*/
+
+$sqlTorneo = "
+
+SELECT *
+
+FROM torneos
+
+WHERE id = :id
+
+LIMIT 1
+
+";
+
+$stmtTorneo = $pdo->prepare($sqlTorneo);
+
+$stmtTorneo->execute([
+    ":id" => $torneo_id
+]);
+
+$torneo = $stmtTorneo->fetch(PDO::FETCH_ASSOC);
+
+if(!$torneo){
+
+    die("Torneo inexistente");
+
+}
+
+/*
+|--------------------------------------------------------------------------
+| DATOS
+|--------------------------------------------------------------------------
+*/
+
+$categorias = $pdo->query("
+
+    SELECT
+        id,
+        nombre
+
+    FROM categorias
+
+    ORDER BY nombre
+
+")->fetchAll(PDO::FETCH_ASSOC);
+
+$jugadores = $pdo->query("
+
+    SELECT
+        id,
+        nombre
+
+    FROM jugadores
+
+    WHERE activo = 1
+
+    ORDER BY nombre
+
+")->fetchAll(PDO::FETCH_ASSOC);
+
+/*
+|--------------------------------------------------------------------------
+| CREAR PARTIDO
+|--------------------------------------------------------------------------
+*/
+
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+
     $stmt = $pdo->prepare("
+
         INSERT INTO partidos (
+
             torneo_id,
             categoria_id,
+            ronda,
             modalidad,
             fecha,
             hora,
             sede,
-            estado,
-            sets_json
+            estado
+
         )
+
         VALUES (
+
             :torneo,
             :categoria,
+            :ronda,
             :modalidad,
             :fecha,
             :hora,
             :sede,
-            :estado,
-            :sets
+            :estado
+
         )
+
     ");
 
     $stmt->execute([
-        ":torneo" => $_POST["torneo_id"],
+
+        ":torneo" => $torneo_id,
+
         ":categoria" => $_POST["categoria_id"],
+
+        ":ronda" => $_POST["ronda"],
+
         ":modalidad" => $_POST["modalidad"],
+
         ":fecha" => $_POST["fecha"],
+
         ":hora" => $_POST["hora"],
+
         ":sede" => $_POST["sede"],
-        ":estado" => $_POST["estado"],
-        ":sets" => $sets_json
+
+        ":estado" => $_POST["estado"]
+
     ]);
 
     $partido_id = $pdo->lastInsertId();
 
-    // =========================
-    // INSERT JUGADORES (FIX REAL)
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | JUGADORES
+    |--------------------------------------------------------------------------
+    */
+
     $insertJugador = $pdo->prepare("
-    INSERT INTO partido_jugadores (
-        partido_id,
-        jugador_id,
-        equipo
-    )
-    VALUES (
-        :partido_id,
-        :jugador_id,
-        :equipo
-    )
-");
 
-$mapa = [
-    "A" => ["jugador_a1", "jugador_a2"],
-    "B" => ["jugador_b1", "jugador_b2"]
-];
+        INSERT INTO partido_jugadores (
 
-foreach ($mapa as $equipo => $campos) {
+            partido_id,
+            jugador_id,
+            equipo
 
-    foreach ($campos as $campo) {
+        )
 
-        if (!isset($_POST[$campo])) {
-            continue;
+        VALUES (
+
+            :partido_id,
+            :jugador_id,
+            :equipo
+
+        )
+
+    ");
+
+    $mapa = [
+
+        "A" => ["jugador_a1", "jugador_a2"],
+
+        "B" => ["jugador_b1", "jugador_b2"]
+
+    ];
+
+    foreach($mapa as $equipo => $campos){
+
+        foreach($campos as $campo){
+
+            if(!isset($_POST[$campo])){
+                continue;
+            }
+
+            $jugador_id = $_POST[$campo];
+
+            if($jugador_id === "" || $jugador_id === null){
+                continue;
+            }
+
+            $insertJugador->execute([
+
+                ":partido_id" => $partido_id,
+
+                ":jugador_id" => (int)$jugador_id,
+
+                ":equipo" => $equipo
+
+            ]);
+
         }
 
-        $jugador_id = $_POST[$campo];
-
-        // 🔥 CLAVE: evitar valores vacíos
-        if ($jugador_id === "" || $jugador_id === null) {
-            continue;
-        }
-
-        $insertJugador->execute([
-            ":partido_id" => $partido_id,
-            ":jugador_id" => (int)$jugador_id,
-            ":equipo" => $equipo
-        ]);
     }
-}
 
-    header("Location: listar_partidos.php");
+    header(
+        "Location: torneo_partidos.php?torneo_id=" . $torneo_id
+    );
+
     exit;
+
 }
 
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -239,130 +345,275 @@ button{
 
 <div class="container">
 
+<body>
+
+<div class="container">
+
+```
 <div class="topbar">
-    <div class="title"> Crear partido </div>
-    <a href="index.php" class="button"> ← Panel </a>
+
+    <div class="title">
+        Crear partido
+    </div>
+
+    <a
+        href="torneo_partidos.php?torneo_id=<?= $torneo_id ?>"
+        class="button"
+    >
+        ← Torneo
+    </a>
+
 </div>
+
 <form method="POST">
 
-<!-- CONTEXTO -->
-<div class="card">
-    <h3>Contexto del partido</h3>
+    <!-- TORNEO -->
 
-    <select name="torneo_id" required>
-        <option value="">Torneo</option>
-        <?php foreach($torneos as $t): ?>
-            <option value="<?= $t["id"] ?>"><?= $t["nombre"] ?></option>
-        <?php endforeach; ?>
-    </select>
+    <div class="card">
 
-    <select name="categoria_id" required>
-        <option value="">Categoría</option>
-        <?php foreach($categorias as $c): ?>
-            <option value="<?= $c["id"] ?>"><?= $c["nombre"] ?></option>
-        <?php endforeach; ?>
-    </select>
+        <h3>
+            Torneo
+        </h3>
 
-    <select name="modalidad">
-        <option>Singles</option>
-        <option>Dobles</option>
-    </select>
-</div>
+        <input
+            type="text"
+            value="<?= htmlspecialchars($torneo["nombre"]) ?>"
+            disabled
+        >
 
-<!-- PROGRAMACIÓN -->
-<div class="card">
-    <h3>Programación</h3>
-
-    <div class="grid">
-        <input type="date" name="fecha">
-        <input type="time" name="hora">
     </div>
 
-    <select name="sede">
-        <option>CTC</option>
-        <option>Olimpia</option>
-        <option>Independiente</option>
-    </select>
+    <!-- CONTEXTO -->
 
-    <select name="estado">
-        <option>Borrador</option>
-        <option>Programado</option>
-        <option>En juego</option>
-        <option>Finalizado</option>
-    </select>
-</div>
+    <div class="card">
 
-<!-- EQUIPOS -->
-<div class="card">
-    <h3>Equipos</h3>
+        <h3>
+            Contexto del partido
+        </h3>
 
-    <div class="teams">
+        <select
+            name="categoria_id"
+            required
+        >
 
-        <div class="team">
-            <div class="team-title">Equipo A</div>
+            <option value="">
+                Categoría
+            </option>
 
-            <select name="jugador_a1" required>
-                <option value="">Jugador A1</option>
-                <?php foreach($jugadores as $j): ?>
-                    <option value="<?= $j["id"] ?>"><?= $j["nombre"] ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?php foreach($categorias as $c): ?>
 
-            <select name="jugador_a2">
-                <option value="">Jugador A2 (opcional)</option>
-                <?php foreach($jugadores as $j): ?>
-                    <option value="<?= $j["id"] ?>"><?= $j["nombre"] ?></option>
-                <?php endforeach; ?>
-            </select>
+                <option value="<?= $c["id"] ?>">
+
+                    <?= $c["nombre"] ?>
+
+                </option>
+
+            <?php endforeach; ?>
+
+        </select>
+
+        <input
+            type="text"
+            name="ronda"
+            placeholder="Ronda (Ej: Grupo A / Semifinal)"
+            required
+        >
+
+        <select name="modalidad">
+
+            <option>
+                Singles
+            </option>
+
+            <option>
+                Dobles
+            </option>
+
+        </select>
+
+    </div>
+
+    <!-- PROGRAMACIÓN -->
+
+    <div class="card">
+
+        <h3>
+            Programación
+        </h3>
+
+        <div class="grid">
+
+            <input
+                type="date"
+                name="fecha"
+            >
+
+            <input
+                type="time"
+                name="hora"
+            >
+
         </div>
 
-        <div class="team">
-            <div class="team-title">Equipo B</div>
+        <select name="sede">
 
-            <select name="jugador_b1" required>
-                <option value="">Jugador B1</option>
-                <?php foreach($jugadores as $j): ?>
-                    <option value="<?= $j["id"] ?>"><?= $j["nombre"] ?></option>
-                <?php endforeach; ?>
-            </select>
+            <option>
+                CTC
+            </option>
 
-            <select name="jugador_b2">
-                <option value="">Jugador B2 (opcional)</option>
-                <?php foreach($jugadores as $j): ?>
-                    <option value="<?= $j["id"] ?>"><?= $j["nombre"] ?></option>
-                <?php endforeach; ?>
-            </select>
+            <option>
+                Olimpia
+            </option>
+
+            <option>
+                Independiente
+            </option>
+
+        </select>
+
+        <select name="estado">
+
+            <option>
+                Borrador
+            </option>
+
+            <option>
+                Programado
+            </option>
+
+            <option>
+                En juego
+            </option>
+
+            <option>
+                Finalizado
+            </option>
+
+        </select>
+
+    </div>
+
+    <!-- EQUIPOS -->
+
+    <div class="card">
+
+        <h3>
+            Equipos
+        </h3>
+
+        <div class="teams">
+
+            <div class="team">
+
+                <div class="team-title">
+                    Equipo A
+                </div>
+
+                <select
+                    name="jugador_a1"
+                    required
+                >
+
+                    <option value="">
+                        Jugador A1
+                    </option>
+
+                    <?php foreach($jugadores as $j): ?>
+
+                        <option value="<?= $j["id"] ?>">
+
+                            <?= $j["nombre"] ?>
+
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+                <select name="jugador_a2">
+
+                    <option value="">
+                        Jugador A2 (opcional)
+                    </option>
+
+                    <?php foreach($jugadores as $j): ?>
+
+                        <option value="<?= $j["id"] ?>">
+
+                            <?= $j["nombre"] ?>
+
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+            </div>
+
+            <div class="team">
+
+                <div class="team-title">
+                    Equipo B
+                </div>
+
+                <select
+                    name="jugador_b1"
+                    required
+                >
+
+                    <option value="">
+                        Jugador B1
+                    </option>
+
+                    <?php foreach($jugadores as $j): ?>
+
+                        <option value="<?= $j["id"] ?>">
+
+                            <?= $j["nombre"] ?>
+
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+                <select name="jugador_b2">
+
+                    <option value="">
+                        Jugador B2 (opcional)
+                    </option>
+
+                    <?php foreach($jugadores as $j): ?>
+
+                        <option value="<?= $j["id"] ?>">
+
+                            <?= $j["nombre"] ?>
+
+                        </option>
+
+                    <?php endforeach; ?>
+
+                </select>
+
+            </div>
+
         </div>
 
     </div>
-</div>
 
-<!-- SETS -->
-<div class="card">
-    <h3>Sets</h3>
+    <button type="submit">
 
-    <div class="set-row">
-        <div class="set-label">Set 1</div>
-        <input name="set1_a" placeholder="A">
-        <input name="set1_b" placeholder="B">
-    </div>
+        Crear partido
 
-    <div class="set-row">
-        <div class="set-label">Set 2</div>
-        <input name="set2_a" placeholder="A">
-        <input name="set2_b" placeholder="B">
-    </div>
-
-    <div class="set-row">
-        <div class="set-label">Set 3</div>
-        <input name="set3_a" placeholder="A">
-        <input name="set3_b" placeholder="B">
-    </div>
-</div>
-
-<button type="submit">Crear partido</button>
+    </button>
 
 </form>
+```
+
+</div>
+
+</body>
+
 
 </div>
 

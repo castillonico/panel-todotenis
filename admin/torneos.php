@@ -554,8 +554,7 @@ select{
 
             <a
                 href="?toggle=<?= $torneo["id"] ?>"
-                class="action"
-            >
+                class="action">
 
                 <?= $torneo["activo"]
                     ? "Desactivar"
@@ -563,9 +562,12 @@ select{
 
             </a>
 
-            <div class="action action-disabled">
-                Partidos
-            </div>
+            <a href="torneo_partidos.php?torneo_id=<?= $torneo["id"] ?>"
+                class="action"
+                >
+                Partidos 
+            </a>
+
 
             <div class="action action-disabled">
                 Ranking
