@@ -80,7 +80,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
 /*
 |--------------------------------------------------------------------------
-| CAMBIAR ACTIVO
+| TOGGLE ACTIVO
 |--------------------------------------------------------------------------
 */
 
@@ -152,21 +152,42 @@ body{
     background:#0f1223;
     color:#fefefe;
     font-family:Arial,sans-serif;
-    padding:20px;
+    padding:14px;
 
 }
 
 .container{
 
-    max-width:1100px;
+    max-width:900px;
     margin:auto;
 
 }
 
-h1{
+.topbar{
 
-    margin-top:0;
-    margin-bottom:24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    margin-bottom:20px;
+
+}
+
+.title{
+
+    font-size:28px;
+    font-weight:bold;
+
+}
+
+.button{
+
+    background:#067ec9;
+    color:white;
+    text-decoration:none;
+    padding:12px 18px;
+    border-radius:14px;
+    font-weight:bold;
 
 }
 
@@ -174,16 +195,15 @@ h1{
 
     background:#151935;
     border-radius:22px;
-    padding:24px;
-    margin-bottom:24px;
+    padding:20px;
+    margin-bottom:18px;
 
 }
 
-.grid{
+.form-grid{
 
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:16px;
+    gap:14px;
 
 }
 
@@ -205,87 +225,134 @@ select{
 
 }
 
-button{
+.submit{
 
     background:#067ec9;
-
     color:white;
-
     border:none;
-
     border-radius:14px;
-
-    padding:14px 18px;
-
+    padding:14px;
     font-weight:bold;
-
     cursor:pointer;
 
 }
 
-.table{
+.torneo-card{
 
-    width:100%;
-    border-collapse:collapse;
+    background:#151935;
+    border-radius:22px;
+    padding:20px;
+    margin-bottom:16px;
 
 }
 
-.table th,
-.table td{
+.torneo-top{
 
-    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:16px;
 
-    text-align:left;
+}
 
-    border-bottom:1px solid rgba(255,255,255,.08);
+.torneo-name{
+
+    font-size:22px;
+    font-weight:bold;
+
+}
+
+.torneo-type{
+
+    opacity:.7;
+    margin-top:6px;
 
 }
 
 .badge{
 
-    display:inline-block;
-
-    padding:6px 12px;
-
+    padding:8px 12px;
     border-radius:999px;
-
     font-size:13px;
-
     font-weight:bold;
+    white-space:nowrap;
 
 }
 
-.estado-activo{
+.badge-activo{
 
-    background:#1d7f42;
-
-}
-
-.estado-borrador{
-
-    background:#7f5d1d;
+    background:#1f7a42;
 
 }
 
-.estado-finalizado{
+.badge-borrador{
+
+    background:#7c5d20;
+
+}
+
+.badge-finalizado{
 
     background:#444;
 
 }
 
-.link{
+.badge-inscripciones{
 
-    color:#67b7ff;
+    background:#6d2f91;
 
+}
+
+.badge-archivado{
+
+    background:#555;
+
+}
+
+.torneo-meta{
+
+    display:grid;
+    gap:10px;
+    margin-bottom:18px;
+    opacity:.8;
+
+}
+
+.actions{
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+
+}
+
+.action{
+
+    background:#0f1223;
+    color:white;
     text-decoration:none;
-
+    padding:12px 14px;
+    border-radius:12px;
+    font-size:14px;
     font-weight:bold;
 
 }
 
-.switch{
+.action-disabled{
 
-    color:#ffffff90;
+    opacity:.45;
+    pointer-events:none;
+
+}
+
+@media(min-width:768px){
+
+    .form-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
 
 }
 
@@ -298,139 +365,108 @@ button{
 <div class="container">
 
 ```
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+<div class="topbar">
 
-```
-<h1 style="margin:0;">
-    Torneos
-</h1>
+    <div class="title">
+        Torneos
+    </div>
 
-<a
-    href="index.php"
-    class="link"
-    style="
-        background:#067ec9;
-        color:white;
-        padding:12px 18px;
-        border-radius:14px;
-        text-decoration:none;
-        font-weight:bold;
-    "
->
-    ← Volver al panel
-</a>
+    <a
+        href="index.php"
+        class="button"
+    >
+        Panel
+    </a>
 
 </div>
-
 
 <div class="card">
 
     <form method="POST">
 
-        <div class="grid">
+        <div class="form-grid">
 
-            <div>
+            <input
+                type="text"
+                name="nombre"
+                placeholder="Nombre torneo"
+                required
+            >
 
-                <input
-                    type="text"
-                    name="nombre"
-                    placeholder="Nombre del torneo"
-                    required
-                >
+            <select name="tipo">
 
-            </div>
+                <option value="Superliga">
+                    Superliga
+                </option>
 
-            <div>
+                <option value="Open">
+                    Open
+                </option>
 
-                <select name="tipo">
+                <option value="Master">
+                    Master
+                </option>
 
-                    <option value="Superliga">
-                        Superliga
-                    </option>
+                <option value="Copa">
+                    Copa
+                </option>
 
-                    <option value="Open">
-                        Open
-                    </option>
+            </select>
 
-                    <option value="Master">
-                        Master
-                    </option>
+            <select name="estado">
 
-                    <option value="Copa">
-                        Copa
-                    </option>
+                <option value="Borrador">
+                    Borrador
+                </option>
 
-                </select>
+                <option value="Inscripciones">
+                    Inscripciones
+                </option>
 
-            </div>
+                <option value="Activo">
+                    Activo
+                </option>
 
-            <div>
+                <option value="Finalizado">
+                    Finalizado
+                </option>
 
-                <select name="estado">
+                <option value="Archivado">
+                    Archivado
+                </option>
 
-                    <option value="Borrador">
-                        Borrador
-                    </option>
+            </select>
 
-                    <option value="Inscripciones">
-                        Inscripciones
-                    </option>
+            <input
+                type="date"
+                name="fecha_inicio"
+            >
 
-                    <option value="Activo">
-                        Activo
-                    </option>
-
-                    <option value="Finalizado">
-                        Finalizado
-                    </option>
-
-                    <option value="Archivado">
-                        Archivado
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div>
-
-                <input
-                    type="date"
-                    name="fecha_inicio"
-                >
-
-            </div>
-
-            <div>
-
-                <input
-                    type="date"
-                    name="fecha_fin"
-                >
-
-            </div>
-
-            <div>
-
-                <label class="switch">
-
-                    <input
-                        type="checkbox"
-                        name="suma_global"
-                        checked
-                    >
-
-                    Suma ranking global
-
-                </label>
-
-            </div>
+            <input
+                type="date"
+                name="fecha_fin"
+            >
 
         </div>
 
         <br>
 
-        <button type="submit">
+        <label style="display:block;margin-bottom:18px;">
+
+            <input
+                type="checkbox"
+                name="suma_global"
+                checked
+            >
+
+            Suma ranking global
+
+        </label>
+
+        <button
+            type="submit"
+            class="submit"
+        >
             Crear torneo
         </button>
 
@@ -438,158 +474,119 @@ button{
 
 </div>
 
-<div class="card">
+<?php foreach($torneos as $torneo): ?>
 
-    <table class="table">
+    <?php
 
-        <thead>
+    $badgeClass = "badge-borrador";
 
-            <tr>
+    if($torneo["estado"] === "Activo"){
+        $badgeClass = "badge-activo";
+    }
 
-                <th>
-                    Nombre
-                </th>
+    if($torneo["estado"] === "Finalizado"){
+        $badgeClass = "badge-finalizado";
+    }
 
-                <th>
-                    Tipo
-                </th>
+    if($torneo["estado"] === "Inscripciones"){
+        $badgeClass = "badge-inscripciones";
+    }
 
-                <th>
-                    Estado
-                </th>
+    if($torneo["estado"] === "Archivado"){
+        $badgeClass = "badge-archivado";
+    }
 
-                <th>
-                    Inicio
-                </th>
+    ?>
 
-                <th>
-                    Fin
-                </th>
+    <div class="torneo-card">
 
-                <th>
-                    Global
-                </th>
+        <div class="torneo-top">
 
-                <th>
-                    Activo
-                </th>
+            <div>
 
-            </tr>
+                <div class="torneo-name">
+                    <?= htmlspecialchars($torneo["nombre"]) ?>
+                </div>
 
-        </thead>
+                <div class="torneo-type">
+                    <?= htmlspecialchars($torneo["tipo"]) ?>
+                </div>
 
-        <tbody>
+            </div>
 
-            <?php foreach($torneos as $torneo): ?>
+            <div class="badge <?= $badgeClass ?>">
 
-                <tr>
+                <?= htmlspecialchars($torneo["estado"]) ?>
 
-                    <td>
+            </div>
 
-                        <?= htmlspecialchars($torneo["nombre"]) ?>
+        </div>
 
-                    </td>
+        <div class="torneo-meta">
 
-                    <td>
+            <div>
 
-                        <?= htmlspecialchars($torneo["tipo"]) ?>
+                Inicio:
+                <?= $torneo["fecha_inicio"] ?: "-" ?>
 
-                    </td>
+            </div>
 
-                    <td>
+            <div>
 
-                        <span class="badge">
+                Fin:
+                <?= $torneo["fecha_fin"] ?: "-" ?>
 
-                            <?= htmlspecialchars($torneo["estado"]) ?>
+            </div>
 
-                        </span>
+            <div>
 
-                    </td>
+                Ranking global:
+                <?= $torneo["suma_global"] ? "Sí" : "No" ?>
 
-                    <td>
+            </div>
 
-                        <?= $torneo["fecha_inicio"] ?: "-" ?>
+            <div>
 
-                    </td>
+                Estado sistema:
+                <?= $torneo["activo"] ? "Activo" : "Desactivado" ?>
 
-                    <td>
+            </div>
 
-                        <?= $torneo["fecha_fin"] ?: "-" ?>
+        </div>
 
-                    </td>
+        <div class="actions">
 
-                    <td>
+            <a
+                href="editar_torneo.php?id=<?= $torneo["id"] ?>"
+                class="action"
+            >
+                Editar
+            </a>
 
-                        <?= $torneo["suma_global"]
-                            ? "Sí"
-                            : "No" ?>
+            <a
+                href="?toggle=<?= $torneo["id"] ?>"
+                class="action"
+            >
 
-                    </td>
+                <?= $torneo["activo"]
+                    ? "Desactivar"
+                    : "Activar" ?>
 
-                    <td>
+            </a>
 
-                        <td>
+            <div class="action action-disabled">
+                Partidos
+            </div>
 
-```
-<a
-    href="?toggle=<?= $torneo["id"] ?>"
-    class="link"
->
+            <div class="action action-disabled">
+                Ranking
+            </div>
 
-    <?= $torneo["activo"]
-        ? "Desactivar"
-        : "Activar" ?>
+        </div>
 
-</a>
-```
+    </div>
 
-</td>
-
-<td>
-
-```
-<div style="display:flex;gap:12px;flex-wrap:wrap;">
-
-    <a
-        href="editar_torneo.php?id=<?= $torneo["id"] ?>"
-        class="link"
-    >
-        Editar
-    </a>
-
-    <a
-        href="#"
-        class="link"
-        style="opacity:.5;"
-    >
-        Partidos
-    </a>
-
-    <a
-        href="#"
-        class="link"
-        style="opacity:.5;"
-    >
-        Ranking
-    </a>
-
-</div>
-```
-
-</td>
-
-
-                    </td>
-
-                </tr>
-
-            <?php endforeach; ?>
-
-        </tbody>
-
-    </table>
-
-</div>
+<?php endforeach; ?>
 ```
 
 </div>
