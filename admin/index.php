@@ -267,61 +267,41 @@ h1{
     <div class="grid">
 
         <a href="jugadores.php" class="card">
-
             <div>
                 <div class="card-icon">👤</div>
                 <div class="card-title">Jugadores</div>
                 <div class="card-text">Gestión completa de jugadores, perfiles y actividad.</div>
             </div>
-
         </a>
 
         <a href="crear_partido.php" class="card">
-
             <div>
                 <div class="card-icon">📅</div>
                 <div class="card-title">Crear partido</div>
                 <div class="card-text">Programación de partidos singles y dobles.</div>
             </div>
-
         </a>
 
         <a href="listar_partidos.php" class="card">
-
             <div>
                 <div class="card-icon">📋</div>
                 <div class="card-title">Ver partidos</div>
                 <div class="card-text">Gestión, edición y carga de resultados.</div>
             </div>
-
         </a>
-        <a
-href="torneos.php"
-class="card">
 
-    <div class="card-title">
-        Torneos
-    </div>
-
-    <div class="card-description">
-        Crear, administrar y organizar torneos
-    </div>
-
-
-</a>
-
-
-    </div>
-
-
-    <div class="status-box"></div>
-    <div>
-        <a
-            href="?logout=1"
-            class="logout"
-        >
-            Cerrar sesión
+        <a href="torneos.php" class="card">
+            <div class="card-icon">🏆</div>
+            <div class="card-title">Torneos</div>
+            <div class="card-description">Crear, administrar y organizar torneos</div>
         </a>
+
+    </div>
+
+    <div class="status-box">
+        <div>
+        <a href="?logout=1" class="logout"> Cerrar sesión </a>
+    </div>
     </div>
  
 </div>
