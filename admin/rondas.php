@@ -54,35 +54,64 @@ if(
     ($_POST["action"] ?? "") === "crear"
 ){
 
-    $stmt = $pdo->prepare("
+   /*
+|--------------------------------------------------------------------------
+| OBTENER SIGUIENTE ORDEN
+|--------------------------------------------------------------------------
+*/
 
-        INSERT INTO rondas_torneo (
+$stmtOrden = $pdo->prepare("
 
-            torneo_id,
-            nombre,
-            orden_visual
+    SELECT COALESCE(MAX(orden_visual),0) + 1 as siguiente
 
-        )
+    FROM rondas_torneo
 
-        VALUES (
+    WHERE torneo_id = :torneo_id
 
-            :torneo_id,
-            :nombre,
-            :orden_visual
+");
 
-        )
+$stmtOrden->execute([
+    ":torneo_id" => $torneo_id
+]);
 
-    ");
+$orden_visual = (int)$stmtOrden->fetchColumn();
 
-    $stmt->execute([
+/*
+|--------------------------------------------------------------------------
+| INSERT
+|--------------------------------------------------------------------------
+*/
 
-        ":torneo_id" => $torneo_id,
+$stmt = $pdo->prepare("
 
-        ":nombre" => trim($_POST["nombre"]),
+    INSERT INTO rondas_torneo (
 
-        ":orden_visual" => (int)$_POST["orden_visual"]
+        torneo_id,
+        nombre,
+        orden_visual
 
-    ]);
+    )
+
+    VALUES (
+
+        :torneo_id,
+        :nombre,
+        :orden_visual
+
+    )
+
+");
+
+$stmt->execute([
+
+    ":torneo_id" => $torneo_id,
+
+    ":nombre" => trim($_POST["nombre"]),
+
+    ":orden_visual" => $orden_visual
+
+]);
+
 
     header(
         "Location: rondas.php?torneo_id=" . $torneo_id
@@ -313,7 +342,7 @@ input{
         </div>
 
         <a
-            href="torneo_partidos.php?torneo_id=<?= $torneo_id ?>"
+            href="torneos.php?torneo_id=<?= $torneo_id ?>"
             class="button"
         >
             ← Torneo
@@ -339,13 +368,6 @@ input{
                 type="text"
                 name="nombre"
                 placeholder="Nombre de ronda"
-                required
-            >
-
-            <input
-                type="number"
-                name="orden_visual"
-                placeholder="Orden visual"
                 required
             >
 
