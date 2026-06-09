@@ -453,6 +453,19 @@ select{
         <div class="actions">
 
             <a
+                href="rondas.php?torneo_id=<?= $torneo["id"] ?>"
+                class="action"
+            >
+                Rondas
+            </a>
+
+            <a href="torneo_partidos.php?torneo_id=<?= $torneo["id"] ?>"
+                class="action"
+                >
+                Partidos 
+            </a>
+
+            <a
                 href="editar_torneo.php?id=<?= $torneo["id"] ?>"
                 class="action"
             >
@@ -469,18 +482,6 @@ select{
 
             </a>
 
-            <a href="torneo_partidos.php?torneo_id=<?= $torneo["id"] ?>"
-                class="action"
-                >
-                Partidos 
-            </a>
-            <a
-                href="rondas.php?torneo_id=<?= $torneo["id"] ?>"
-                class="action"
-            >
-                Rondas
-            </a>
-
             <div class="action action-disabled">
                 Ranking
             </div>
@@ -495,6 +496,9 @@ select{
 </div>
 
 <div class="card">
+    <div class="torneo-name">
+                    Nuevo torneo
+                </div>
 
     <form method="POST">
 
