@@ -369,99 +369,6 @@ select{
     <a href="index.php" class="button"> ← Panel </a>
 </div>
 
-<div class="card">
-
-    <form method="POST">
-
-        <div class="form-grid">
-
-            <input
-                type="text"
-                name="nombre"
-                placeholder="Nombre torneo"
-                required
-            >
-
-            <select name="tipo">
-
-                <option value="Superliga">
-                    Superliga
-                </option>
-
-                <option value="Open">
-                    Open
-                </option>
-
-                <option value="Master">
-                    Master
-                </option>
-
-                <option value="Copa">
-                    Copa
-                </option>
-
-            </select>
-
-            <select name="estado">
-
-                <option value="Borrador">
-                    Borrador
-                </option>
-
-                <option value="Inscripciones">
-                    Inscripciones
-                </option>
-
-                <option value="Activo">
-                    Activo
-                </option>
-
-                <option value="Finalizado">
-                    Finalizado
-                </option>
-
-                <option value="Archivado">
-                    Archivado
-                </option>
-
-            </select>
-
-            <input
-                type="date"
-                name="fecha_inicio"
-            >
-
-            <input
-                type="date"
-                name="fecha_fin"
-            >
-
-        </div>
-
-        <br>
-
-        <label style="display:block;margin-bottom:18px;">
-
-            <input
-                type="checkbox"
-                name="suma_global"
-                checked
-            >
-
-            Suma ranking global
-
-        </label>
-
-        <button
-            type="submit"
-            class="submit"
-        >
-            Crear torneo
-        </button>
-
-    </form>
-
-</div>
 
 <?php foreach($torneos as $torneo): ?>
 
@@ -584,6 +491,100 @@ select{
 
 <?php endforeach; ?>
 
+
+</div>
+
+<div class="card">
+
+    <form method="POST">
+
+        <div class="form-grid">
+
+            <input
+                type="text"
+                name="nombre"
+                placeholder="Nombre torneo"
+                required
+            >
+
+            <select name="tipo">
+
+                <option value="Superliga">
+                    Superliga
+                </option>
+
+                <option value="Open">
+                    Open
+                </option>
+
+                <option value="Master">
+                    Master
+                </option>
+
+                <option value="Copa">
+                    Copa
+                </option>
+
+            </select>
+
+            <select name="estado">
+
+                <option value="Borrador">
+                    Borrador
+                </option>
+
+                <option value="Inscripciones">
+                    Inscripciones
+                </option>
+
+                <option value="Activo">
+                    Activo
+                </option>
+
+                <option value="Finalizado">
+                    Finalizado
+                </option>
+
+                <option value="Archivado">
+                    Archivado
+                </option>
+
+            </select>
+
+            <input
+                type="date"
+                name="fecha_inicio"
+            >
+
+            <input
+                type="date"
+                name="fecha_fin"
+            >
+
+        </div>
+
+        <br>
+
+        <label style="display:block;margin-bottom:18px;">
+
+            <input
+                type="checkbox"
+                name="suma_global"
+                checked
+            >
+
+            Suma ranking global
+
+        </label>
+
+        <button
+            type="submit"
+            class="submit"
+        >
+            Crear torneo
+        </button>
+
+    </form>
 
 </div>
 
