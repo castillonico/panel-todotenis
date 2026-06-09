@@ -4,6 +4,10 @@ require_once __DIR__ . "/../core/db.php";
 
 header("Content-Type: application/json; charset=utf-8");
 
+$torneo_id = isset($_GET["torneo_id"])
+    ? (int)$_GET["torneo_id"]
+    : 0;
+
 $sql = "
 
 SELECT
@@ -22,6 +26,24 @@ INNER JOIN categorias c
 ON c.id = p.categoria_id
 
 WHERE p.estado != 'Borrador'
+
+";
+
+$params = [];
+
+if($torneo_id){
+
+    $sql .= "
+
+    AND p.torneo_id = :torneo_id
+
+    ";
+
+    $params[":torneo_id"] = $torneo_id;
+
+}
+
+$sql .= "
 
 ORDER BY
 
@@ -54,7 +76,17 @@ ORDER BY
 
 ";
 
-$stmt = $pdo->query($sql);
+if($torneo_id){
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute($params);
+
+}else{
+
+    $stmt = $pdo->query($sql);
+
+}
 
 $partidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
