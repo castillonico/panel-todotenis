@@ -78,6 +78,35 @@ $jugadores = $pdo->query("
 
 /*
 |--------------------------------------------------------------------------
+| RONDAS
+|--------------------------------------------------------------------------
+*/
+
+$stmtRondas = $pdo->prepare("
+
+    SELECT
+        id,
+        nombre,
+        orden_visual
+
+    FROM rondas_torneo
+
+    WHERE torneo_id = :torneo_id
+
+    ORDER BY
+        orden_visual ASC,
+        id ASC
+
+");
+
+$stmtRondas->execute([
+    ":torneo_id" => $torneo_id
+]);
+
+$rondas = $stmtRondas->fetchAll(PDO::FETCH_ASSOC);
+
+/*
+|--------------------------------------------------------------------------
 | CREAR PARTIDO
 |--------------------------------------------------------------------------
 */
@@ -90,7 +119,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
             torneo_id,
             categoria_id,
-            ronda,
+            ronda_id,
             modalidad,
             fecha,
             hora,
@@ -103,7 +132,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
             :torneo,
             :categoria,
-            :ronda,
+            :ronda_id,
             :modalidad,
             :fecha,
             :hora,
@@ -120,7 +149,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
         ":categoria" => $_POST["categoria_id"],
 
-        ":ronda" => $_POST["ronda"],
+        ":ronda_id" => !empty($_POST["ronda_id"])
+            ? $_POST["ronda_id"]
+            : null,
 
         ":modalidad" => $_POST["modalidad"],
 
@@ -207,9 +238,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 }
 
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -345,11 +373,6 @@ button{
 
 <div class="container">
 
-<body>
-
-<div class="container">
-
-```
 <div class="topbar">
 
     <div class="title">
@@ -412,12 +435,25 @@ button{
 
         </select>
 
-        <input
-            type="text"
-            name="ronda"
-            placeholder="Ronda (Ej: Grupo A / Semifinal)"
-            required
+        <select
+            name="ronda_id"
         >
+
+            <option value="">
+                Ronda (opcional)
+            </option>
+
+            <?php foreach($rondas as $r): ?>
+
+                <option value="<?= $r["id"] ?>">
+
+                    <?= $r["nombre"] ?>
+
+                </option>
+
+            <?php endforeach; ?>
+
+        </select>
 
         <select name="modalidad">
 
@@ -608,14 +644,9 @@ button{
     </button>
 
 </form>
-```
 
 </div>
 
 </body>
 
-
-</div>
-
-</body>
 </html>
