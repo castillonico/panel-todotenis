@@ -568,7 +568,7 @@ select{
                 Partidos 
             </a>
             <a
-                href="rondas.php?torneo_id=<?= $t["id"] ?>"
+                href="rondas.php?torneo_id=<?= $torneo["id"] ?>"
                 class="action"
             >
                 Rondas
