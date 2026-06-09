@@ -567,7 +567,12 @@ select{
                 >
                 Partidos 
             </a>
-
+            <a
+                href="rondas.php?torneo_id=<?= $t["id"] ?>"
+                class="action"
+            >
+                Rondas
+            </a>
 
             <div class="action action-disabled">
                 Ranking
