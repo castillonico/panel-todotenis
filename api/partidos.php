@@ -11,19 +11,29 @@ $torneo_id = isset($_GET["torneo_id"])
 $sql = "
 
 SELECT
+
     p.id,
+
     p.fecha,
     p.hora,
     p.sede,
     p.estado,
     p.modalidad,
+
     c.nombre AS categoria,
-    p.sets_json
+
+    p.sets_json,
+
+    rt.nombre as ronda,
+    rt.orden_visual
 
 FROM partidos p
 
 INNER JOIN categorias c
 ON c.id = p.categoria_id
+
+LEFT JOIN rondas_torneo rt
+ON rt.id = p.ronda_id
 
 WHERE p.estado != 'Borrador'
 
@@ -46,6 +56,8 @@ if($torneo_id){
 $sql .= "
 
 ORDER BY
+
+    rt.orden_visual ASC,
 
     CASE p.estado
         WHEN 'En juego' THEN 1
@@ -119,7 +131,11 @@ function obtenerJugadores($pdo, $partido_id, $equipo){
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 
-$resultado = [];
+$resultado = [
+    "ronda" => $p["ronda"],
+
+    "orden_ronda" => (int)$p["orden_visual"],
+];
 
 foreach($partidos as $p){
 

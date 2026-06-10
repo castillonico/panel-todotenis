@@ -49,10 +49,13 @@ $sqlPartidos = "
 SELECT
 
     p.id,
-    p.ronda,
+
+    rt.nombre as ronda,
+
     p.fecha,
     p.hora,
     p.estado,
+
     c.nombre as categoria
 
 FROM partidos p
@@ -60,12 +63,19 @@ FROM partidos p
 INNER JOIN categorias c
     ON c.id = p.categoria_id
 
+LEFT JOIN rondas_torneo rt
+    ON rt.id = p.ronda_id
+
 WHERE p.torneo_id = :torneo_id
 
 ORDER BY
 
+    rt.orden_visual ASC,
+
     p.fecha ASC,
+
     p.hora ASC,
+
     p.id DESC
 
 ";
