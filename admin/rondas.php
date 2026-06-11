@@ -376,9 +376,34 @@ input{
                 required
                 >
                 <div class="ronda-orden">
+            <select
+    name="tipo"
+    required
+    style="
+        width:100%;
+        padding:12px;
+        border:none;
+        border-radius:12px;
+        margin-bottom:12px;
+        box-sizing:border-box;
+        background:#0f1223;
+        color:white;
+    "
+>
 
-    Tipo:
-    <?= ucfirst($r["tipo"]) ?>
+    <option value="grupo">
+        Grupo
+    </option>
+
+    <option value="liga">
+        Liga
+    </option>
+
+    <option value="playoff">
+        Play Off
+    </option>
+
+</select>
 
 </div>
 
