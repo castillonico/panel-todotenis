@@ -82,13 +82,15 @@ $orden_visual = (int)$stmtOrden->fetchColumn();
 |--------------------------------------------------------------------------
 */
 
-$stmt = $pdo->prepare("
+
+    $stmt = $pdo->prepare("
 
     INSERT INTO rondas_torneo (
 
         torneo_id,
         nombre,
-        orden_visual
+        orden_visual,
+        tipo
 
     )
 
@@ -96,7 +98,8 @@ $stmt = $pdo->prepare("
 
         :torneo_id,
         :nombre,
-        :orden_visual
+        :orden_visual,
+        :tipo
 
     )
 
@@ -108,7 +111,9 @@ $stmt->execute([
 
     ":nombre" => trim($_POST["nombre"]),
 
-    ":orden_visual" => $orden_visual
+    ":orden_visual" => $orden_visual,
+
+    ":tipo" => $_POST["tipo"]
 
 ]);
 
@@ -369,6 +374,34 @@ input{
                 name="nombre"
                 placeholder="Nombre de ronda"
                 required
+                <select
+    name="tipo"
+    required
+    style="
+        width:100%;
+        padding:12px;
+        border:none;
+        border-radius:12px;
+        margin-bottom:12px;
+        box-sizing:border-box;
+        background:#0f1223;
+        color:white;
+    "
+>
+
+    <option value="grupo">
+        Grupo
+    </option>
+
+    <option value="liga">
+        Liga
+    </option>
+
+    <option value="playoff">
+        Play Off
+    </option>
+
+</select>
             >
 
             <button
@@ -400,6 +433,12 @@ input{
                     <?= $r["orden_visual"] ?>
 
                 </div>
+                <div class="ronda-orden">
+
+    Tipo:
+    <?= ucfirst($r["tipo"]) ?>
+
+</div>
 
                 <a
                     href="?torneo_id=<?= $torneo_id ?>&eliminar=<?= $r["id"] ?>"
