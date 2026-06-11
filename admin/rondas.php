@@ -374,35 +374,13 @@ input{
                 name="nombre"
                 placeholder="Nombre de ronda"
                 required
-                <select
-    name="tipo"
-    required
-    style="
-        width:100%;
-        padding:12px;
-        border:none;
-        border-radius:12px;
-        margin-bottom:12px;
-        box-sizing:border-box;
-        background:#0f1223;
-        color:white;
-    "
->
+                >
+                <div class="ronda-orden">
 
-    <option value="grupo">
-        Grupo
-    </option>
+    Tipo:
+    <?= ucfirst($r["tipo"]) ?>
 
-    <option value="liga">
-        Liga
-    </option>
-
-    <option value="playoff">
-        Play Off
-    </option>
-
-</select>
-            >
+</div>
 
             <button
                 type="submit"
