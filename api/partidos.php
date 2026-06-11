@@ -25,7 +25,8 @@ SELECT
     p.sets_json,
 
     rt.nombre as ronda,
-    rt.orden_visual
+    rt.tipo as tipo_ronda,
+    rt.orden_visual as orden_ronda
 
 FROM partidos p
 
