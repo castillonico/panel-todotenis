@@ -140,39 +140,42 @@ foreach($partidos as $p){
     $equipoB = obtenerJugadores($pdo, $p["id"], "B");
 
     $sets = json_decode($p["sets_json"], true) ?: [];
+$resultado[] = [
 
-    $resultado[] = [
+"fecha" => date("d-m-Y", strtotime($p["fecha"])),
 
-    "fecha" => date("d-m-Y", strtotime($p["fecha"])),
+"hora" => substr($p["hora"],0,5) . " hs",
 
-    "hora" => substr($p["hora"],0,5) . " hs",
+"sede" => $p["sede"],
 
-    "sede" => $p["sede"],
+"jugador1" => implode(" / ", $equipoA),
 
-    "jugador1" => implode(" / ", $equipoA),
+"jugador2" => implode(" / ", $equipoB),
 
-    "jugador2" => implode(" / ", $equipoB),
+"set1_j1" => $sets[0][0] ?? "",
+"set1_j2" => $sets[0][1] ?? "",
 
-    "set1_j1" => $sets[0][0] ?? "",
-    "set1_j2" => $sets[0][1] ?? "",
+"set2_j1" => $sets[1][0] ?? "",
+"set2_j2" => $sets[1][1] ?? "",
 
-    "set2_j1" => $sets[1][0] ?? "",
-    "set2_j2" => $sets[1][1] ?? "",
+"set3_j1" => $sets[2][0] ?? "",
+"set3_j2" => $sets[2][1] ?? "",
 
-    "set3_j1" => $sets[2][0] ?? "",
-    "set3_j2" => $sets[2][1] ?? "",
+"estado" => $p["estado"],
 
-    "estado" => $p["estado"],
+"modalidad" => $p["modalidad"],
 
-    "modalidad" => $p["modalidad"],
+"categoria" => $p["categoria"],
 
-    "categoria" => $p["categoria"],
+"ronda" => $p["ronda"],
 
-    "ronda" => $p["ronda"],
+"tipo_ronda" => $p["tipo_ronda"],
 
-    "orden_ronda" => (int)$p["orden_ronda"]
+"orden_ronda" => (int)$p["orden_ronda"]
 
 ];
+
+    
 }
 
 echo json_encode(
